@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useCallback } from "react";
+import { useState, ChangeEvent, useCallback, useRef, useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useGithubStore } from "../store";
 import debounce from "lodash/debounce";
@@ -9,7 +9,9 @@ import { SearchBox } from "./SearchBox";
 export const SearchInput = () => {
  
   const [inputValue, setInputValue] = useState<string>('') 
-  
+  const [showSearchBox, setShowSearchBox] = useState<boolean>(false)
+  const searchRef = useRef<HTMLDivElement>(null);
+
   
   const fetchGithub = useGithubStore(state => state.fetchGithub)
 
@@ -23,10 +25,28 @@ export const SearchInput = () => {
 
   const handleChangueInput = (e:ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
-    if(e.target.value.length > 3) {
+    if(e.target.value.length > 2) {
+      setShowSearchBox(true)
       debouncedFetchGithub(e.target.value);
-    } 
+    } else {
+      setShowSearchBox(false)
+    }
   }
+
+    // useEffect para detectar clics fuera del contenedor
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        // Si la referencia existe y el clic NO fue dentro del contenedor:
+        if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+          setShowSearchBox(false); // Oculta el SearchBox
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
 
 
@@ -51,16 +71,20 @@ export const SearchInput = () => {
                     <div className=" absolute text-m-gray-text text-2xl top-1/2 left-4 transform -translate-y-1/2">
                         <IoSearch />
                     </div>
-                    <input
-                        className="outline-none text-m-gray-text placeholder:text-m-gray-text-low pl-12 p-4 w-full" 
-                        type="text" 
-                        name="username"
-                        placeholder="Username" 
-                        onChange={handleChangueInput}
-                        value={inputValue}
-                        />
+                    <div ref={searchRef} className="relative">
+                          <input
+                              className="outline-none text-m-gray-text placeholder:text-m-gray-text-low pl-12 p-4 w-full" 
+                              type="text" 
+                              name="username"
+                              placeholder="Username" 
+                              onChange={handleChangueInput}
+                              onFocus={() => inputValue.length > 2 && setShowSearchBox(true)}
+                              value={inputValue}
+                          />
+                          {showSearchBox && <SearchBox />}
+                    </div>
+                    
                 </div>
-              <SearchBox />
             </form>
         </div>
     </section>

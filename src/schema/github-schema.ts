@@ -19,11 +19,13 @@ export const GithubResponsesSchemaDetail = z.object({
 })
 
 
-export const GithubDetailAccSchema = z.object ({
-    login: z.string(),
-    id: z.number(),
-    node_id: z.string(),
-    avatar_url: z.string(),
-    url: z.string(),
-    bio: z.string().nullable().optional(),
-})
+export const GithubDetailAccSchema = z.array(
+    z.object ({
+        login: z.string(),
+        id: z.number(),
+        node_id: z.string(),
+        avatar_url: z.string(),
+        url: z.string(),
+        bio: z.string().nullable().optional(),
+    })
+) 

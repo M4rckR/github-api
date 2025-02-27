@@ -5,7 +5,7 @@ import { devtools } from "zustand/middleware";
 
 
 type GithubStore = {
-    githubDetailAcc: GithubDetailAcc[],
+    githubDetailAcc: GithubDetailAcc,
     fetchGithub: (username:string) => void
 }
 
@@ -15,7 +15,6 @@ export const useGithubStore = create<GithubStore>()(
         fetchGithub: async (username) => {
             const githubDetailAcc = await GithubServices(username)
             set({githubDetailAcc})
-
         }
     })
 ))
