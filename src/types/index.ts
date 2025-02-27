@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { GithubResponsesSchema } from "../schema/github-schema";
+import { GithubDetailAccSchema, GithubResponsesSchema } from "../schema/github-schema";
 
 export type GithubResponses = z.infer<typeof GithubResponsesSchema>;
+export type GithubDetailAcc = z.infer<typeof GithubDetailAccSchema>;
 

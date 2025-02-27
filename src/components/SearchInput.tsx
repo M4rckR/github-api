@@ -17,7 +17,7 @@ export const SearchInput = () => {
   const debouncedFetchGithub =  useCallback(
     debounce((value: string) => {
       fetchGithub(value);
-    }, 1000), // 500ms delay
+    }, 500), // 500ms delay
     []
   );
 
@@ -44,10 +44,10 @@ export const SearchInput = () => {
     <section className="bg-[url(/hero-image-github-profile-sm.jpg)] pt-8 pb-32 bg-no-repeat bg-cover bg-bottom">
         <div className="container mx-auto px-4 relative">
             <form 
-              className="flex justify-center relative"
+              className="relative w-full max-w-[480px] mx-auto"
               // onSubmit={handleSubmit}
               >
-                <div className="bg-m-gray-bg relative w-full max-w-[480px] rounded-lg">
+                <div className="bg-m-gray-bg relative w-full rounded-lg">
                     <div className=" absolute text-m-gray-text text-2xl top-1/2 left-4 transform -translate-y-1/2">
                         <IoSearch />
                     </div>

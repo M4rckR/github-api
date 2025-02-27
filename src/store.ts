@@ -1,31 +1,21 @@
 import { create } from "zustand";
 import { GithubServices } from "./services/GithubServices";
-import { GithubResponses } from "./types";
+import { GithubDetailAcc } from "./types";
 import { devtools } from "zustand/middleware";
 
 
 type GithubStore = {
-    githubResponses: GithubResponses
+    githubDetailAcc: GithubDetailAcc[],
     fetchGithub: (username:string) => void
 }
 
 export const useGithubStore = create<GithubStore>()(
     devtools((set) => ({
-        githubResponses: {
-            items: [
-                {
-                    login: '',
-                    id: 0,
-                    node_id: '',
-                    avatar_url: '',
-                    location: '',
-                    bio: ''
-                }
-            ]
-        },
+        githubDetailAcc: [],
         fetchGithub: async (username) => {
-            const githubResponses = await GithubServices(username)
-            set({githubResponses})
+            const githubDetailAcc = await GithubServices(username)
+            set({githubDetailAcc})
+
         }
     })
 ))
