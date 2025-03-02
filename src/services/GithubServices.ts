@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GithubResponsesSchema, GithubResponsesSchemaDetail, GithubDetailAccSchema } from "../schema/github-schema";
+import { GithubResponsesSchema, GithubResponsesSchemaDetail, GithubDetailAccSchema, GithubDefaultAccSchema, GithubDefaultAccSchemaRepos } from "../schema/github-schema";
 
 
 export async function GithubServices(username:string) {
@@ -49,6 +49,47 @@ export async function GithubServices(username:string) {
       return []
   }
 
+
+
+}
+
+
+export async function AccSelected(username:string = 'github') {
+
+  const urlAcc = `https://api.github.com/users/${username}`;
+  const urlRepos = `https://api.github.com/users/${username}/repos?per_page=4`;
+
+  try {
+
+      const [userData, reposData] = await Promise.all([
+        axios.get(urlAcc),
+        axios.get(urlRepos)
+      ])
+
+      const userValidation  = GithubDefaultAccSchema.safeParse(userData.data);
+      const reposValidation  = GithubDefaultAccSchemaRepos.safeParse(reposData.data);
+
+    // Comprobamos que ambas validaciones sean exitosas
+    if (!userValidation.success || !reposValidation.success) {
+      console.log('Error en la validación:', userValidation.error, reposValidation.error);
+      return {};
+    }
+
+    
+    // Usamos Zod para construir un objeto combinado y tipado correctamente
+    const combinedData = {
+      user: userValidation.data,
+      repos: reposValidation.data
+    };
+
+    console.log(combinedData)
+    return combinedData;
+
+
+
+  } catch (error) {
+      console.log(error)
+  }
 
 
 }

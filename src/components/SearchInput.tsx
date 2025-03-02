@@ -5,7 +5,6 @@ import debounce from "lodash/debounce";
 import { SearchBox } from "./SearchBox";
 
 
-
 export const SearchInput = () => {
  
   const [inputValue, setInputValue] = useState<string>('') 
